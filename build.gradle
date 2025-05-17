@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'dvie'
@@ -27,6 +28,15 @@ dependencies {
 
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    relocate 'com.zaxxer.hikari', 'dvie.libs.hikari'
+}
+
+jar {
+    enabled = false
 }
 
 tasks.withType(JavaCompile).configureEach {

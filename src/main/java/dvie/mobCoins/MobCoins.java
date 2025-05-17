@@ -1,7 +1,12 @@
 package dvie.mobCoins;
 
+import dev.splityosis.sysengine.commandlib.CommandLib;
+import dev.splityosis.sysengine.commandlib.manager.CommandManager;
 import dev.splityosis.sysengine.configlib.ConfigLib;
 import dev.splityosis.sysengine.configlib.manager.ConfigManager;
+import dvie.mobCoins.api.MobCoinsAPI;
+import dvie.mobCoins.commands.AdminMobCoinCommands;
+import dvie.mobCoins.commands.MobCoinsCommands;
 import dvie.mobCoins.config.MessageConfig;
 import dvie.mobCoins.config.MobCoinConfig;
 import dvie.mobCoins.config.MobsConfig;
@@ -27,6 +32,7 @@ public final class MobCoins extends JavaPlugin {
     @Getter private ExecutorService executorService;
     @Getter private MobCoinDAO mobCoinDAO;
     @Getter private Datafile datafile;
+    @Getter private CommandManager commandManager;
     public static MobCoinConfig mobCoinConfig;
     public static MessageConfig messageConfig;
     public static MobsConfig mobsConfig;
@@ -44,6 +50,8 @@ public final class MobCoins extends JavaPlugin {
 
         initialiseConfigs();
         EventRegistry.initialise(this);
+        commandManager = CommandLib.createCommandManager(this);
+        registerCommands();
 
         if (mobCoinConfig.useDatabase) {
             this.databaseManager = new DatabaseManager(mobCoinConfig);
@@ -76,6 +84,13 @@ public final class MobCoins extends JavaPlugin {
     @SneakyThrows
     public void reloadPlugin() {
         configManager.reloadAll();
+    }
+
+    public void registerCommands() {
+        commandManager.registerCommands(
+                new AdminMobCoinCommands(),
+                new MobCoinsCommands()
+        );
     }
 
     @SneakyThrows
