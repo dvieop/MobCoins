@@ -1,0 +1,5 @@
+name: MobCoins
+version: '1.0.0'
+main: dvie.mobCoins.MobCoins
+api-version: '1.21'
+authors: [ dvie ]
